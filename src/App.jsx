@@ -1,34 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/**
+ * App.jsx
+ * Main application component with route configuration
+ * 
+ * Routes:
+ * - /login    → Login page
+ * - /signup   → Registration page  
+ * - /dashboard → Main dashboard (protected - will add auth later)
+ * - /         → Redirects to dashboard
+ */
+
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+
+// Import pages
+import Login from './pages/login'
+import Signup from './pages/Signup'
+import Dashboard from './pages/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        
+        {/* Protected Routes (will add protection later) */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        
+        {/* Redirect root to dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        
+        {/* 404 - Catch all unmatched routes */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+/**
+ * NotFound Component
+ * Displayed when user navigates to non-existent route
+ */
+function NotFound() {
+  return (
+    <div className="min-h-screen bg-dashboard-bg flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-6xl font-bold text-gray-300 mb-4">404</h1>
+        <p className="text-xl text-gray-600 mb-6">Page not found</p>
+        <a 
+          href="/dashboard" 
+          className="btn-primary inline-block"
+        >
+          Go to Dashboard
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
